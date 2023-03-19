@@ -28,37 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            DisplayDevicesBox = new System.Windows.Forms.ListBox();
+            ScanButton = new System.Windows.Forms.Button();
+            Selected = new System.Windows.Forms.Button();
+            SuspendLayout();
             // 
-            // label1
+            // DisplayDevicesBox
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(41, 36);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Intentio";
+            DisplayDevicesBox.FormattingEnabled = true;
+            DisplayDevicesBox.ItemHeight = 32;
+            DisplayDevicesBox.Location = new System.Drawing.Point(673, 722);
+            DisplayDevicesBox.Name = "DisplayDevicesBox";
+            DisplayDevicesBox.Size = new System.Drawing.Size(477, 228);
+            DisplayDevicesBox.TabIndex = 1;
+            // 
+            // ScanButton
+            // 
+            ScanButton.Location = new System.Drawing.Point(749, 956);
+            ScanButton.Name = "ScanButton";
+            ScanButton.Size = new System.Drawing.Size(150, 46);
+            ScanButton.TabIndex = 2;
+            ScanButton.Text = "Scan";
+            ScanButton.UseVisualStyleBackColor = true;
+            // 
+            // Selected
+            // 
+            Selected.Location = new System.Drawing.Point(905, 956);
+            Selected.Name = "Selected";
+            Selected.Size = new System.Drawing.Size(150, 46);
+            Selected.TabIndex = 3;
+            Selected.Text = "Select";
+            Selected.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Intentio.Properties.Resources.AppCode;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label1);
-            this.DoubleBuffered = true;
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackgroundImage = Properties.Resources.AppCode;
+            BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            ClientSize = new System.Drawing.Size(1733, 1108);
+            Controls.Add(Selected);
+            Controls.Add(ScanButton);
+            Controls.Add(DisplayDevicesBox);
+            DoubleBuffered = true;
+            Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            Name = "Form1";
+            Text = "Form1";
+            ResumeLayout(false);
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ListBox DisplayDevicesBox;
+        private System.Windows.Forms.Button ScanButton;
+        private System.Windows.Forms.Button Selected;
     }
 }
 
