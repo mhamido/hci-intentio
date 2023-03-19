@@ -50,6 +50,7 @@
             ScanButton.TabIndex = 2;
             ScanButton.Text = "Scan";
             ScanButton.UseVisualStyleBackColor = true;
+            ScanButton.Click += ScanButton_Click;
             // 
             // Selected
             // 
@@ -59,6 +60,7 @@
             Selected.TabIndex = 3;
             Selected.Text = "Select";
             Selected.UseVisualStyleBackColor = true;
+            Selected.Click += Selected_Click;
             // 
             // Form1
             // 

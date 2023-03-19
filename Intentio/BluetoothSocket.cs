@@ -10,14 +10,18 @@ using System.Threading.Tasks;
 namespace Intentio
 {
 
-    public record Device(string Name, string address) { }
+    public record Device(string Name, string Address)
+    {
+        public readonly static Device DebugChild = new Device("Alyaa", "E8:07:BF:A2:58:98");
+        public readonly static Device DebugParent = new Device("Omar", "E8:07:BF:A2:58:99");
+    }
 
-    public class BluetoothSocket : ISocket<IEnumerable<Device>>
+    public sealed class BluetoothSocket : ISocket<List<Device>>
     {
         private const int BT_SOCKET_PORT = 25595;
 
         public BluetoothSocket() : base("localhost", BT_SOCKET_PORT) { }
 
-        protected override IEnumerable<Device> Parse(string input) => JsonSerializer.Deserialize<IEnumerable<Device>>(input);
+        protected override List<Device> Parse(string input) => JsonSerializer.Deserialize<List<Device>>(input);
     }
 }
