@@ -12,8 +12,8 @@ namespace Intentio
 
     public record Device(string Name, string Address)
     {
-        public readonly static Device DebugChild = new Device("Alyaa", "E8:07:BF:A2:58:98");
-        public readonly static Device DebugParent = new Device("Omar", "E8:07:BF:A2:58:99");
+        public readonly static Device DebugChild = new Device("Omar", "E8:07:BF:A2:58:98");
+        public readonly static Device DebugParent = new Device("Mahmoud", "E8:07:BF:A2:58:99");
     }
 
     public sealed class BluetoothSocket : ISocket<List<Device>>

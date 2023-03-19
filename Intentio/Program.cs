@@ -43,7 +43,7 @@ namespace Intentio
                         _ => Device.DebugParent
                     };
 
-                    Application.Run(new UserActivityForum(device));
+                    UserActivityForum.Run(device);
                 }
             }
         }

@@ -75,9 +75,8 @@ namespace Intentio
                     //MessageBox.Show(devices[i].ToString());
                     // Transfer to user activity forumn
                     Hide();
-                    var activity = new UserActivityForum(devices[i]);
-                    activity.FormClosed += (s, args) => Close();
-                    activity.Show();
+                    var activity = UserActivityForum.Run(devices[i]);
+                    //activity.FormClosed += (s, args) => Close();
                     break;
                 }
             }
