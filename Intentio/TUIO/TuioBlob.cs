@@ -1,25 +1,12 @@
-/*
- TUIO C# Library - part of the reacTIVision project
- Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 3.0 of the License, or (at your option) any later version.
- 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public
- License along with this library.
-*/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Windows.Forms.AxHost;
 
-namespace TUIO
+namespace Intentio.TUIO
 {
 
     /**
@@ -44,23 +31,23 @@ namespace TUIO
          */
         protected float angle;
 
-		/**
+        /**
          * <summary>
          * The blob width value.</summary>
          */
-		protected float width;
+        protected float width;
 
-		/**
+        /**
          * <summary>
          * The blob height value.</summary>
          */
-		protected float height;
+        protected float height;
 
-		/**
+        /**
          * <summary>
          * The blob area value.</summary>
          */
-		protected float area;
+        protected float area;
 
 
         /**
@@ -101,14 +88,14 @@ namespace TUIO
          * <param name="h">the height to assign</param>
          * <param name="f">the area to assign</param>
          */
-		public TuioBlob(TuioTime ttime, long si, int bi, float xp, float yp, float a, float w, float h, float f)
+        public TuioBlob(TuioTime ttime, long si, int bi, float xp, float yp, float a, float w, float h, float f)
             : base(ttime, si, xp, yp)
         {
             blob_id = bi;
             angle = a;
-			width = w;
-			height = h;
-			area = f;
+            width = w;
+            height = h;
+            area = f;
             rotation_speed = 0.0f;
             rotation_accel = 0.0f;
         }
@@ -127,14 +114,14 @@ namespace TUIO
          * <param name="h">the height to assign</param>
          * <param name="f">the area to assign</param>
          */
-		public TuioBlob(long si, int bi, float xp, float yp, float a, float w, float h, float f)
+        public TuioBlob(long si, int bi, float xp, float yp, float a, float w, float h, float f)
             : base(si, xp, yp)
         {
             blob_id = bi;
             angle = a;
-			width = w;
-			height = h;
-			area = f;
+            width = w;
+            height = h;
+            area = f;
             rotation_speed = 0.0f;
             rotation_accel = 0.0f;
         }
@@ -151,9 +138,9 @@ namespace TUIO
         {
             blob_id = tblb.BlobID;
             angle = tblb.Angle;
-			width = tblb.Width;
-			height = tblb.Height;
-			area = tblb.Area;
+            width = tblb.Width;
+            height = tblb.Height;
+            area = tblb.Area;
             rotation_speed = 0.0f;
             rotation_accel = 0.0f;
         }
@@ -180,13 +167,13 @@ namespace TUIO
          * <param name="ma">the motion acceleration to assign</param>
          * <param name="ra">the rotation acceleration to assign</param>
          */
-		public void update(TuioTime ttime, float xp, float yp, float a, float w, float h, float f, float xs, float ys, float rs, float ma, float ra)
+        public void update(TuioTime ttime, float xp, float yp, float a, float w, float h, float f, float xs, float ys, float rs, float ma, float ra)
         {
             base.update(ttime, xp, yp, xs, ys, ma);
             angle = a;
-			width = w;
-			height = h;
-			area = f;
+            width = w;
+            height = h;
+            area = f;
             rotation_speed = rs;
             rotation_accel = ra;
             if ((rotation_accel != 0) && (state != TUIO_STOPPED)) state = TUIO_ROTATING;
@@ -210,13 +197,13 @@ namespace TUIO
          * <param name="ma">the motion acceleration to assign</param>
          * <param name="ra">the rotation acceleration to assign</param>
          */
-		public void update(float xp, float yp, float a, float w, float h, float f, float xs, float ys, float rs, float ma, float ra)
+        public void update(float xp, float yp, float a, float w, float h, float f, float xs, float ys, float rs, float ma, float ra)
         {
             base.update(xp, yp, xs, ys, ma);
             angle = a;
-			width = w;
-			height = h;
-			area = f;
+            width = w;
+            height = h;
+            area = f;
             rotation_speed = rs;
             rotation_accel = ra;
             if ((rotation_accel != 0) && (state != TUIO_STOPPED)) state = TUIO_ROTATING;
@@ -236,14 +223,14 @@ namespace TUIO
          * <param name="h">the height to assign</param>
          * <param name="f">the area to assign</param>
          */
-		public void update(TuioTime ttime, float xp, float yp, float a,float w, float h, float f)
+        public void update(TuioTime ttime, float xp, float yp, float a, float w, float h, float f)
         {
-			TuioPoint lastPoint = path.Last.Value;
+            TuioPoint lastPoint = path.Last.Value;
             base.update(ttime, xp, yp);
 
-			width = w;
-			height = h;
-			area = f;
+            width = w;
+            height = h;
+            area = f;
 
             TuioTime diffTime = currentTime - lastPoint.TuioTime;
             float dt = diffTime.TotalMilliseconds / 1000.0f;
@@ -272,9 +259,9 @@ namespace TUIO
         {
             base.update(tblb);
             angle = tblb.Angle;
-			width = tblb.Width;
-			height = tblb.Height;
-			area = tblb.Area;
+            width = tblb.Width;
+            height = tblb.Height;
+            area = tblb.Area;
             rotation_speed = tblb.RotationSpeed;
             rotation_accel = tblb.RotationAccel;
             if ((rotation_accel != 0) && (state != TUIO_STOPPED)) state = TUIO_ROTATING;
@@ -287,7 +274,7 @@ namespace TUIO
          */
         public new void stop(TuioTime ttime)
         {
-			update(ttime, this.xpos, this.ypos, this.angle, this.width, this.height, this.area);
+            update(ttime, this.xpos, this.ypos, this.angle, this.width, this.height, this.area);
         }
         #endregion
 
@@ -302,60 +289,60 @@ namespace TUIO
         {
             get { return blob_id; }
         }
-		
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public int getBlobID()
         {
             return BlobID;
         }
-	
-		/**
+
+        /**
          * <summary>
          * Returns the width of this TuioBlob.</summary>
          * <returns>the width of this TuioBlob</returns>
          */
-		public float Width
-		{
-			get { return width; }
-		}
+        public float Width
+        {
+            get { return width; }
+        }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
-		public float getWidth()
-		{
-			return Width;
-		}
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        public float getWidth()
+        {
+            return Width;
+        }
 
-		/**
+        /**
          * <summary>
          * Returns the height of this TuioBlob.</summary>
          * <returns>the heigth of this TuioBlob</returns>
          */
-		public float Height
-		{
-			get { return height; }
-		}
+        public float Height
+        {
+            get { return height; }
+        }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
-		public float getHeight()
-		{
-			return Height;
-		}
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        public float getHeight()
+        {
+            return Height;
+        }
 
-		/**
+        /**
          * <summary>
          * Returns the area of this TuioBlob.</summary>
          * <returns>the area of this TuioBlob</returns>
          */
-		public float Area
-		{
-			get { return area; }
-		}
+        public float Area
+        {
+            get { return area; }
+        }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
-		public float getArea()
-		{
-			return Area;
-		}
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        public float getArea()
+        {
+            return Area;
+        }
 
         /**
          * <summary>
@@ -367,12 +354,12 @@ namespace TUIO
             get { return angle; }
         }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public float getAngle()
         {
             return Angle;
         }
-		
+
         /**
          * <summary>
          * Returns the rotation angle in degrees of this TuioBlob.</summary>
@@ -383,12 +370,12 @@ namespace TUIO
             get { return angle / (float)Math.PI * 180.0f; }
         }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public float getAngleDegrees()
         {
             return AngleDegrees;
         }
-		
+
         /**
          * <summary>
          * Returns the rotation speed of this TuioBlob.</summary>
@@ -399,12 +386,12 @@ namespace TUIO
             get { return rotation_speed; }
         }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public float getRotationSpeed()
         {
             return RotationSpeed;
         }
-		
+
         /**
          * <summary>
          * Returns the rotation acceleration of this TuioBlob.</summary>
@@ -415,12 +402,12 @@ namespace TUIO
             get { return rotation_accel; }
         }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public float getRotationAccel()
         {
             return RotationAccel;
         }
-		
+
         /**
          * <summary>
          * Returns true of this TuioBlob is moving.</summary>
@@ -436,5 +423,4 @@ namespace TUIO
         }
         #endregion
     }
-
 }

@@ -1,47 +1,32 @@
-/*
- TUIO C# Library - part of the reacTIVision project
- Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 3.0 of the License, or (at your option) any later version.
- 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public
- License along with this library.
-*/
-
+﻿using Intentio.OSC.NET;
 using System;
-using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Quic;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
-using OSC.NET;
-
-namespace TUIO
+namespace Intentio.TUIO
 {
     /**
-     * <remarks>
-     * The TuioClient class is the central TUIO protocol decoder component. It provides a simple callback infrastructure using the {@link TuioListener} interface.
-	 * In order to receive and decode TUIO messages an instance of TuioClient needs to be created. The TuioClient instance then generates TUIO events
-	 * which are broadcasted to all registered classes that implement the {@link TuioListener} interface.
-     * </remarks>
-     * <example>
-     * <code>
-     * TuioClient client = new TuioClient();
-	 * client.addTuioListener(myTuioListener);
-	 * client.start();
-     * </code>
-     * </example>
-     * 
-     * @author Martin Kaltenbrunner
-     * @version 1.1.6
-     */
+         * <remarks>
+         * The TuioClient class is the central TUIO protocol decoder component. It provides a simple callback infrastructure using the {@link TuioListener} interface.
+         * In order to receive and decode TUIO messages an instance of TuioClient needs to be created. The TuioClient instance then generates TUIO events
+         * which are broadcasted to all registered classes that implement the {@link TuioListener} interface.
+         * </remarks>
+         * <example>
+         * <code>
+         * TuioClient client = new TuioClient();
+         * client.addTuioListener(myTuioListener);
+         * client.start();
+         * </code>
+         * </example>
+         * 
+         * @author Martin Kaltenbrunner
+         * @version 1.1.6
+         */
     public class TuioClient
     {
         private bool connected = false;
@@ -51,7 +36,7 @@ namespace TUIO
 
         private object cursorSync = new object();
         private object objectSync = new object();
-		private object blobSync = new object();
+        private object blobSync = new object();
 
         private Dictionary<long, TuioObject> objectList = new Dictionary<long, TuioObject>(32);
         private List<long> aliveObjectList = new List<long>(32);
@@ -59,18 +44,17 @@ namespace TUIO
         private Dictionary<long, TuioCursor> cursorList = new Dictionary<long, TuioCursor>(32);
         private List<long> aliveCursorList = new List<long>(32);
         private List<long> newCursorList = new List<long>(32);
-		private Dictionary<long, TuioBlob> blobList = new Dictionary<long, TuioBlob>(32);
-		private List<long> aliveBlobList = new List<long>(32);
-		private List<long> newBlobList = new List<long>(32);
+        private Dictionary<long, TuioBlob> blobList = new Dictionary<long, TuioBlob>(32);
+        private List<long> aliveBlobList = new List<long>(32);
+        private List<long> newBlobList = new List<long>(32);
         private List<TuioObject> frameObjects = new List<TuioObject>(32);
         private List<TuioCursor> frameCursors = new List<TuioCursor>(32);
-		private List<TuioBlob> frameBlobs = new List<TuioBlob>(32);
+        private List<TuioBlob> frameBlobs = new List<TuioBlob>(32);
 
         private List<TuioCursor> freeCursorList = new List<TuioCursor>();
         private int maxCursorID = -1;
-		private List<TuioBlob> freeBlobList = new List<TuioBlob>();
-		private int maxBlobID = -1;
-
+        private List<TuioBlob> freeBlobList = new List<TuioBlob>();
+        private int maxBlobID = -1;
         private int currentFrame = 0;
         private TuioTime currentTime;
 
@@ -137,21 +121,21 @@ namespace TUIO
          */
         public void disconnect()
         {
-			connected = false;
+            connected = false;
             if (receiver != null) receiver.Close();
             receiver = null;
 
             aliveObjectList.Clear();
             aliveCursorList.Clear();
-			aliveBlobList.Clear();
+            aliveBlobList.Clear();
             objectList.Clear();
             cursorList.Clear();
-			blobList.Clear();
+            blobList.Clear();
             frameObjects.Clear();
             frameCursors.Clear();
-			frameBlobs.Clear();
-			freeCursorList.Clear();
-			freeBlobList.Clear();
+            frameBlobs.Clear();
+            freeCursorList.Clear();
+            freeBlobList.Clear();
         }
 
         /**
@@ -538,203 +522,203 @@ namespace TUIO
                     frameCursors.Clear();
                 }
 
-            } 
-			else if (address == "/tuio/2Dblb")
-			{
+            }
+            else if (address == "/tuio/2Dblb")
+            {
 
-				if (command == "set")
-				{
+                if (command == "set")
+                {
 
-					long s_id = (int)args[1];
-					float xpos = (float)args[2];
-					float ypos = (float)args[3];
-					float angle = (float)args[4];
-					float width = (float)args[5];
-					float height = (float)args[6];
-					float area = (float)args[7];
-					float xspeed = (float)args[8];
-					float yspeed = (float)args[9];
-					float rspeed = (float)args[10];
-					float maccel = (float)args[11];
-					float raccel = (float)args[12];
+                    long s_id = (int)args[1];
+                    float xpos = (float)args[2];
+                    float ypos = (float)args[3];
+                    float angle = (float)args[4];
+                    float width = (float)args[5];
+                    float height = (float)args[6];
+                    float area = (float)args[7];
+                    float xspeed = (float)args[8];
+                    float yspeed = (float)args[9];
+                    float rspeed = (float)args[10];
+                    float maccel = (float)args[11];
+                    float raccel = (float)args[12];
 
-					lock (blobList)
-					{
-						if (!blobList.ContainsKey(s_id))
-						{
-							TuioBlob addBlob = new TuioBlob(s_id, -1, xpos, ypos, angle, width, height, area);
-							frameBlobs.Add(addBlob);
-						}
-						else
-						{
-							TuioBlob tblb = (TuioBlob)blobList[s_id];
-							if (tblb == null) return;
-							if ((tblb.X != xpos) || (tblb.Y != ypos) || (tblb.Angle != angle) || (tblb.Width != width) || (tblb.Height != height) || (tblb.Area != area) || (tblb.XSpeed != xspeed) || (tblb.YSpeed != yspeed) || (tblb.RotationSpeed != rspeed) || (tblb.MotionAccel != maccel) || (tblb.RotationAccel != raccel))
-							{
-								TuioBlob updateBlob = new TuioBlob(s_id, tblb.BlobID, xpos, ypos, angle, width, height, area);
-								updateBlob.update(xpos, ypos, angle, width, height, area, xspeed, yspeed, rspeed, maccel, raccel);
-								frameBlobs.Add(updateBlob);
-							}
-						}
-					}
+                    lock (blobList)
+                    {
+                        if (!blobList.ContainsKey(s_id))
+                        {
+                            TuioBlob addBlob = new TuioBlob(s_id, -1, xpos, ypos, angle, width, height, area);
+                            frameBlobs.Add(addBlob);
+                        }
+                        else
+                        {
+                            TuioBlob tblb = (TuioBlob)blobList[s_id];
+                            if (tblb == null) return;
+                            if ((tblb.X != xpos) || (tblb.Y != ypos) || (tblb.Angle != angle) || (tblb.Width != width) || (tblb.Height != height) || (tblb.Area != area) || (tblb.XSpeed != xspeed) || (tblb.YSpeed != yspeed) || (tblb.RotationSpeed != rspeed) || (tblb.MotionAccel != maccel) || (tblb.RotationAccel != raccel))
+                            {
+                                TuioBlob updateBlob = new TuioBlob(s_id, tblb.BlobID, xpos, ypos, angle, width, height, area);
+                                updateBlob.update(xpos, ypos, angle, width, height, area, xspeed, yspeed, rspeed, maccel, raccel);
+                                frameBlobs.Add(updateBlob);
+                            }
+                        }
+                    }
 
-				}
-				else if (command == "alive")
-				{
+                }
+                else if (command == "alive")
+                {
 
-					newBlobList.Clear();
-					for (int i = 1; i < args.Count; i++)
-					{
-						// get the message content
-						long s_id = (int)args[i];
-						newBlobList.Add(s_id);
-						// reduce the blob list to the lost blobs
-						if (aliveBlobList.Contains(s_id))
-							aliveBlobList.Remove(s_id);
-					}
+                    newBlobList.Clear();
+                    for (int i = 1; i < args.Count; i++)
+                    {
+                        // get the message content
+                        long s_id = (int)args[i];
+                        newBlobList.Add(s_id);
+                        // reduce the blob list to the lost blobs
+                        if (aliveBlobList.Contains(s_id))
+                            aliveBlobList.Remove(s_id);
+                    }
 
-					// remove the remaining blobs
-					lock (blobSync)
-					{
-						for (int i = 0; i < aliveBlobList.Count; i++)
-						{
-							long s_id = aliveBlobList[i];
-							if (!blobList.ContainsKey(s_id)) continue;
-							TuioBlob removeBlob = blobList[s_id];
-							removeBlob.remove(currentTime);
-							frameBlobs.Add(removeBlob);
-						}
-					}
+                    // remove the remaining blobs
+                    lock (blobSync)
+                    {
+                        for (int i = 0; i < aliveBlobList.Count; i++)
+                        {
+                            long s_id = aliveBlobList[i];
+                            if (!blobList.ContainsKey(s_id)) continue;
+                            TuioBlob removeBlob = blobList[s_id];
+                            removeBlob.remove(currentTime);
+                            frameBlobs.Add(removeBlob);
+                        }
+                    }
 
-				}
-				else if (command == "fseq")
-				{
-					int fseq = (int)args[1];
-					bool lateFrame = false;
+                }
+                else if (command == "fseq")
+                {
+                    int fseq = (int)args[1];
+                    bool lateFrame = false;
 
-					if (fseq > 0)
-					{
-						if (fseq > currentFrame) currentTime = TuioTime.SessionTime;
-						if ((fseq >= currentFrame) || ((currentFrame - fseq) > 100)) currentFrame = fseq;
-						else lateFrame = true;
-					}
-					else if ((TuioTime.SessionTime.TotalMilliseconds - currentTime.TotalMilliseconds) > 100)
-					{
-						currentTime = TuioTime.SessionTime;
-					}
+                    if (fseq > 0)
+                    {
+                        if (fseq > currentFrame) currentTime = TuioTime.SessionTime;
+                        if ((fseq >= currentFrame) || ((currentFrame - fseq) > 100)) currentFrame = fseq;
+                        else lateFrame = true;
+                    }
+                    else if ((TuioTime.SessionTime.TotalMilliseconds - currentTime.TotalMilliseconds) > 100)
+                    {
+                        currentTime = TuioTime.SessionTime;
+                    }
 
-					if (!lateFrame)
-					{
+                    if (!lateFrame)
+                    {
 
-						IEnumerator<TuioBlob> frameEnum = frameBlobs.GetEnumerator();
-						while (frameEnum.MoveNext())
-						{
-							TuioBlob tblb = frameEnum.Current;
-							switch (tblb.TuioState)
-							{
-							case TuioBlob.TUIO_REMOVED:
-								TuioBlob removeBlob = tblb;
-								removeBlob.remove(currentTime);
+                        IEnumerator<TuioBlob> frameEnum = frameBlobs.GetEnumerator();
+                        while (frameEnum.MoveNext())
+                        {
+                            TuioBlob tblb = frameEnum.Current;
+                            switch (tblb.TuioState)
+                            {
+                                case TuioBlob.TUIO_REMOVED:
+                                    TuioBlob removeBlob = tblb;
+                                    removeBlob.remove(currentTime);
 
-								for (int i = 0; i < listenerList.Count; i++)
-								{
-									TuioListener listener = (TuioListener)listenerList[i];
-									if (listener != null) listener.removeTuioBlob(removeBlob);
-								}
-								lock (blobSync)
-								{
-									blobList.Remove(removeBlob.SessionID);
+                                    for (int i = 0; i < listenerList.Count; i++)
+                                    {
+                                        TuioListener listener = (TuioListener)listenerList[i];
+                                        if (listener != null) listener.removeTuioBlob(removeBlob);
+                                    }
+                                    lock (blobSync)
+                                    {
+                                        blobList.Remove(removeBlob.SessionID);
 
-									if (removeBlob.BlobID == maxBlobID)
-									{
-										maxBlobID = -1;
+                                        if (removeBlob.BlobID == maxBlobID)
+                                        {
+                                            maxBlobID = -1;
 
-										if (blobList.Count > 0)
-										{
+                                            if (blobList.Count > 0)
+                                            {
 
-											IEnumerator<KeyValuePair<long, TuioBlob>> blist = blobList.GetEnumerator();
-											while (blist.MoveNext())
-											{
-												int b_id = blist.Current.Value.BlobID;
-												if (b_id > maxBlobID) maxBlobID = b_id;
-											}
+                                                IEnumerator<KeyValuePair<long, TuioBlob>> blist = blobList.GetEnumerator();
+                                                while (blist.MoveNext())
+                                                {
+                                                    int b_id = blist.Current.Value.BlobID;
+                                                    if (b_id > maxBlobID) maxBlobID = b_id;
+                                                }
 
-											List<TuioBlob> freeBlobBuffer = new List<TuioBlob>();
-											IEnumerator<TuioBlob> flist = freeBlobList.GetEnumerator();
-											while (flist.MoveNext())
-											{
-												TuioBlob testBlob = flist.Current;
-												if (testBlob.BlobID < maxBlobID) freeBlobBuffer.Add(testBlob);
-											}
-											freeBlobList = freeBlobBuffer;
-										}
-										else freeBlobList.Clear();
-									}
-									else if (removeBlob.BlobID < maxBlobID) freeBlobList.Add(removeBlob);
-								}
-								break;
+                                                List<TuioBlob> freeBlobBuffer = new List<TuioBlob>();
+                                                IEnumerator<TuioBlob> flist = freeBlobList.GetEnumerator();
+                                                while (flist.MoveNext())
+                                                {
+                                                    TuioBlob testBlob = flist.Current;
+                                                    if (testBlob.BlobID < maxBlobID) freeBlobBuffer.Add(testBlob);
+                                                }
+                                                freeBlobList = freeBlobBuffer;
+                                            }
+                                            else freeBlobList.Clear();
+                                        }
+                                        else if (removeBlob.BlobID < maxBlobID) freeBlobList.Add(removeBlob);
+                                    }
+                                    break;
 
-							case TuioBlob.TUIO_ADDED:
-								TuioBlob addBlob;
-								lock (blobSync)
-								{
-									int b_id = blobList.Count;
-									if ((blobList.Count <= maxBlobID) && (freeBlobList.Count > 0))
-									{
-										TuioBlob closestBlob = freeBlobList[0];
-										IEnumerator<TuioBlob> testList = freeBlobList.GetEnumerator();
-										while (testList.MoveNext())
-										{
-											TuioBlob testBlob = testList.Current;
-											if (testBlob.getDistance(tblb) < closestBlob.getDistance(tblb)) closestBlob = testBlob;
-										}
-										b_id = closestBlob.BlobID;
-										freeBlobList.Remove(closestBlob);
-									}
-									else maxBlobID = b_id;
+                                case TuioBlob.TUIO_ADDED:
+                                    TuioBlob addBlob;
+                                    lock (blobSync)
+                                    {
+                                        int b_id = blobList.Count;
+                                        if ((blobList.Count <= maxBlobID) && (freeBlobList.Count > 0))
+                                        {
+                                            TuioBlob closestBlob = freeBlobList[0];
+                                            IEnumerator<TuioBlob> testList = freeBlobList.GetEnumerator();
+                                            while (testList.MoveNext())
+                                            {
+                                                TuioBlob testBlob = testList.Current;
+                                                if (testBlob.getDistance(tblb) < closestBlob.getDistance(tblb)) closestBlob = testBlob;
+                                            }
+                                            b_id = closestBlob.BlobID;
+                                            freeBlobList.Remove(closestBlob);
+                                        }
+                                        else maxBlobID = b_id;
 
-									addBlob = new TuioBlob(currentTime, tblb.SessionID, b_id, tblb.X, tblb.Y, tblb.Angle, tblb.Width, tblb.Height, tblb.Area);
-									blobList.Add(addBlob.SessionID, addBlob);
-								}
+                                        addBlob = new TuioBlob(currentTime, tblb.SessionID, b_id, tblb.X, tblb.Y, tblb.Angle, tblb.Width, tblb.Height, tblb.Area);
+                                        blobList.Add(addBlob.SessionID, addBlob);
+                                    }
 
-								for (int i = 0; i < listenerList.Count; i++)
-								{
-									TuioListener listener = (TuioListener)listenerList[i];
-									if (listener != null) listener.addTuioBlob(addBlob);
-								}
-								break;
+                                    for (int i = 0; i < listenerList.Count; i++)
+                                    {
+                                        TuioListener listener = (TuioListener)listenerList[i];
+                                        if (listener != null) listener.addTuioBlob(addBlob);
+                                    }
+                                    break;
 
-							default:
-								TuioBlob updateBlob = getTuioBlob(tblb.SessionID);
-								if ((tblb.X != updateBlob.X && tblb.XSpeed == 0) || (tblb.Y != updateBlob.Y && tblb.YSpeed == 0) || (tblb.Angle != updateBlob.Angle && tblb.RotationSpeed == 0))
-									updateBlob.update(currentTime, tblb.X, tblb.Y, tblb.Angle, tblb.Width, tblb.Height, tblb.Area);
-								else
-									updateBlob.update(currentTime, tblb.X, tblb.Y, tblb.Angle, tblb.Width, tblb.Height, tblb.Area, tblb.XSpeed, tblb.YSpeed, tblb.RotationSpeed, tblb.MotionAccel, tblb.RotationAccel);
+                                default:
+                                    TuioBlob updateBlob = getTuioBlob(tblb.SessionID);
+                                    if ((tblb.X != updateBlob.X && tblb.XSpeed == 0) || (tblb.Y != updateBlob.Y && tblb.YSpeed == 0) || (tblb.Angle != updateBlob.Angle && tblb.RotationSpeed == 0))
+                                        updateBlob.update(currentTime, tblb.X, tblb.Y, tblb.Angle, tblb.Width, tblb.Height, tblb.Area);
+                                    else
+                                        updateBlob.update(currentTime, tblb.X, tblb.Y, tblb.Angle, tblb.Width, tblb.Height, tblb.Area, tblb.XSpeed, tblb.YSpeed, tblb.RotationSpeed, tblb.MotionAccel, tblb.RotationAccel);
 
-								for (int i = 0; i < listenerList.Count; i++)
-								{
-									TuioListener listener = (TuioListener)listenerList[i];
-									if (listener != null) listener.updateTuioBlob(updateBlob);
-								}
-								break;
-							}
-						}
+                                    for (int i = 0; i < listenerList.Count; i++)
+                                    {
+                                        TuioListener listener = (TuioListener)listenerList[i];
+                                        if (listener != null) listener.updateTuioBlob(updateBlob);
+                                    }
+                                    break;
+                            }
+                        }
 
-						for (int i = 0; i < listenerList.Count; i++)
-						{
-							TuioListener listener = (TuioListener)listenerList[i];
-							if (listener != null) listener.refresh(new TuioTime(currentTime));
-						}
+                        for (int i = 0; i < listenerList.Count; i++)
+                        {
+                            TuioListener listener = (TuioListener)listenerList[i];
+                            if (listener != null) listener.refresh(new TuioTime(currentTime));
+                        }
 
-						List<long> buffer = aliveBlobList;
-						aliveBlobList = newBlobList;
-						// recycling the List
-						newBlobList = buffer;
-					}
-					frameBlobs.Clear();
-				}
+                        List<long> buffer = aliveBlobList;
+                        aliveBlobList = newBlobList;
+                        // recycling the List
+                        newBlobList = buffer;
+                    }
+                    frameBlobs.Clear();
+                }
 
-			}
+            }
         }
 
         #region Listener Management
@@ -800,20 +784,20 @@ namespace TUIO
             return listBuffer;
         }
 
-		/**
+        /**
          * <summary>
          * Returns a List of all currently active TuioBlobs</summary>
          * <returns>a List of all currently active TuioBlobs</returns>
          */
-		public List<TuioBlob> getTuioBlobs()
-		{
-			List<TuioBlob> listBuffer;
-			lock (blobSync)
-			{
-				listBuffer = new List<TuioBlob>(blobList.Values);
-			}
-			return listBuffer;
-		}
+        public List<TuioBlob> getTuioBlobs()
+        {
+            List<TuioBlob> listBuffer;
+            lock (blobSync)
+            {
+                listBuffer = new List<TuioBlob>(blobList.Values);
+            }
+            return listBuffer;
+        }
 
         /**
          * <summary>
@@ -847,21 +831,21 @@ namespace TUIO
             return tcursor;
         }
 
-		/**
+        /**
          * <summary>
          * Returns the TuioBlob corresponding to the provided Session ID
          * or NULL if the Session ID does not refer to an active TuioBlob</summary>
          * <returns>an active TuioBlob corresponding to the provided Session ID or NULL</returns>
          */
-		public TuioBlob getTuioBlob(long s_id)
-		{
-			TuioBlob tblob = null;
-			lock (blobSync)
-			{
-				blobList.TryGetValue(s_id, out tblob);
-			}
-			return tblob;
-		}
+        public TuioBlob getTuioBlob(long s_id)
+        {
+            TuioBlob tblob = null;
+            lock (blobSync)
+            {
+                blobList.TryGetValue(s_id, out tblob);
+            }
+            return tblob;
+        }
         #endregion
 
     }

@@ -1,38 +1,23 @@
-/*
- TUIO C# Library - part of the reacTIVision project
- Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 3.0 of the License, or (at your option) any later version.
- 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public
- License along with this library.
-*/
-
-using System;
-
-namespace TUIO
+namespace Intentio.TUIO
 {
-
     /**
-     * <remarks>
-     * The TuioTime class is a simple structure that is used to reprent the time that has elapsed since the session start.
-     * The time is internally represented as seconds and fractions of microseconds which should be more than sufficient for gesture related timing requirements.
-     * Therefore at the beginning of a typical TUIO session the static method initSession() will set the reference time for the session.
-     * Another important static method getSessionTime will return a TuioTime object representing the time elapsed since the session start.
-     * The class also provides various addtional convience method, which allow some simple time arithmetics.
-     * </remarks>
-     *
-     * @author Martin Kaltenbrunner
-     * @version 1.1.6
-     */
+        * <remarks>
+        * The TuioTime class is a simple structure that is used to reprent the time that has elapsed since the session start.
+        * The time is internally represented as seconds and fractions of microseconds which should be more than sufficient for gesture related timing requirements.
+        * Therefore at the beginning of a typical TUIO session the static method initSession() will set the reference time for the session.
+        * Another important static method getSessionTime will return a TuioTime object representing the time elapsed since the session start.
+        * The class also provides various addtional convience method, which allow some simple time arithmetics.
+        * </remarks>
+        *
+        * @author Martin Kaltenbrunner
+        * @version 1.1.6
+        */
     public class TuioTime
     {
 

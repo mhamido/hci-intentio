@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Intentio.TUIO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Services.Description;
 using System.Windows.Forms;
-using TUIO;
 
 namespace Intentio
 {
@@ -58,6 +58,7 @@ namespace Intentio
             client.addTuioListener(this);
 
             client.connect();
+            Debug.Assert(client.isConnected());
         }
 
         private void Form_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
@@ -112,9 +113,7 @@ namespace Intentio
         private void Form_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             client.removeTuioListener(this);
-
             client.disconnect();
-            System.Environment.Exit(0);
         }
 
         public void addTuioObject(TuioObject o)
@@ -195,7 +194,7 @@ namespace Intentio
 
     }
 
-    public partial class TrailMakingTest : Form
+    public partial class TrailMakingTest : Form, TuioListener
     {
         private Bitmap off;
         private readonly IUser child;
@@ -204,8 +203,6 @@ namespace Intentio
         private readonly Stopwatch stopwatch = new Stopwatch();
 
         private int timesDistracted = 0;
-
-        private int port = 3333;
         TuioDemo app;
 
         public TrailMakingTest(IUser child)
@@ -228,7 +225,7 @@ namespace Intentio
             WindowState = FormWindowState.Maximized;
             off = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
             graph = new Graph(12, Width, Height);
-            app = new TuioDemo(port);
+            app = new TuioDemo(3333);
             timer.Start();
             stopwatch.Start();
         }
@@ -335,6 +332,56 @@ namespace Intentio
             Graphics g2 = Graphics.FromImage(off);
             Draw(g2);
             g.DrawImage(off, 0, 0);
+        }
+
+        public void addTuioObject(TuioObject tobj)
+        {
+            ((TuioListener)app).addTuioObject(tobj);
+        }
+
+        public void updateTuioObject(TuioObject tobj)
+        {
+            ((TuioListener)app).updateTuioObject(tobj);
+        }
+
+        public void removeTuioObject(TuioObject tobj)
+        {
+            ((TuioListener)app).removeTuioObject(tobj);
+        }
+
+        public void addTuioCursor(TuioCursor tcur)
+        {
+            ((TuioListener)app).addTuioCursor(tcur);
+        }
+
+        public void updateTuioCursor(TuioCursor tcur)
+        {
+            ((TuioListener)app).updateTuioCursor(tcur);
+        }
+
+        public void removeTuioCursor(TuioCursor tcur)
+        {
+            ((TuioListener)app).removeTuioCursor(tcur);
+        }
+
+        public void addTuioBlob(TuioBlob tblb)
+        {
+            ((TuioListener)app).addTuioBlob(tblb);
+        }
+
+        public void updateTuioBlob(TuioBlob tblb)
+        {
+            ((TuioListener)app).updateTuioBlob(tblb);
+        }
+
+        public void removeTuioBlob(TuioBlob tblb)
+        {
+            ((TuioListener)app).removeTuioBlob(tblb);
+        }
+
+        public void refresh(TuioTime ftime)
+        {
+            ((TuioListener)app).refresh(ftime);
         }
     }
 

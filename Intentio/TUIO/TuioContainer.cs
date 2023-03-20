@@ -1,36 +1,11 @@
-/*
- TUIO C# Library - part of the reacTIVision project
- Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 3.0 of the License, or (at your option) any later version.
- 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public
- License along with this library.
-*/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace TUIO
+namespace Intentio.TUIO
 {
-
-    /**
-     * <remarks>The abstract TuioContainer class defines common attributes that apply 
-     * to both subclasses (TuioObject and TuioCursor).</remarks>
-     * <seealso cref="TuioObject"/>
-     * <seealso cref="TuioCursor"/>
-     *
-     * @author Martin Kaltenbrunner
-     * @version 1.1.6
-     */
     public abstract class TuioContainer : TuioPoint
     {
 
@@ -199,10 +174,11 @@ namespace TUIO
             else if (motion_accel < 0) state = TUIO_DECELERATING;
             else state = TUIO_STOPPED;
 
-			lock (path) {
-				path.AddLast (new TuioPoint (currentTime, xpos, ypos));
-				if (path.Count > 128) path.RemoveFirst ();
-			}
+            lock (path)
+            {
+                path.AddLast(new TuioPoint(currentTime, xpos, ypos));
+                if (path.Count > 128) path.RemoveFirst();
+            }
         }
 
         /**
@@ -235,15 +211,16 @@ namespace TUIO
             y_speed = ys;
             motion_speed = (float)Math.Sqrt(x_speed * x_speed + y_speed * y_speed);
             motion_accel = ma;
-           
+
             if (motion_accel > 0) state = TUIO_ACCELERATING;
             else if (motion_accel < 0) state = TUIO_DECELERATING;
             else state = TUIO_STOPPED;
 
-			lock (path) {
-				path.AddLast (new TuioPoint (currentTime, xpos, ypos));
-				if (path.Count > 128) path.RemoveFirst ();
-			}
+            lock (path)
+            {
+                path.AddLast(new TuioPoint(currentTime, xpos, ypos));
+                if (path.Count > 128) path.RemoveFirst();
+            }
         }
 
         /**
@@ -265,16 +242,17 @@ namespace TUIO
             y_speed = ys;
             motion_speed = (float)Math.Sqrt(x_speed * x_speed + y_speed * y_speed);
             motion_accel = ma;
-            
+
             if (motion_accel > 0) state = TUIO_ACCELERATING;
             else if (motion_accel < 0) state = TUIO_DECELERATING;
             else state = TUIO_STOPPED;
 
-			lock (path) {
-				path.AddLast (new TuioPoint (currentTime, xpos, ypos));
-				if (path.Count > 128) path.RemoveFirst ();
-			}
-		}
+            lock (path)
+            {
+                path.AddLast(new TuioPoint(currentTime, xpos, ypos));
+                if (path.Count > 128) path.RemoveFirst();
+            }
+        }
 
         /**
          * <summary>
@@ -292,15 +270,16 @@ namespace TUIO
             y_speed = tcon.YSpeed;
             motion_speed = (float)Math.Sqrt(x_speed * x_speed + y_speed * y_speed);
             motion_accel = tcon.MotionAccel;
-            
+
             if (motion_accel > 0) state = TUIO_ACCELERATING;
             else if (motion_accel < 0) state = TUIO_DECELERATING;
             else state = TUIO_STOPPED;
 
-			lock (path) {
-				path.AddLast (new TuioPoint (currentTime, xpos, ypos));
-				if (path.Count > 128) path.RemoveFirst ();
-			}
+            lock (path)
+            {
+                path.AddLast(new TuioPoint(currentTime, xpos, ypos));
+                if (path.Count > 128) path.RemoveFirst();
+            }
         }
         #endregion
 
@@ -390,13 +369,15 @@ namespace TUIO
          */
         public List<TuioPoint> Path
         {
-			get { 
-				List<TuioPoint> p;
-				lock (path) {
-					p = new List<TuioPoint> (path); 
-				}
-				return p;
-			}
+            get
+            {
+                List<TuioPoint> p;
+                lock (path)
+                {
+                    p = new List<TuioPoint>(path);
+                }
+                return p;
+            }
         }
 
         [Obsolete("This method is provided only for compatability with legacy code. Use of the property Path instead is recommended.")]

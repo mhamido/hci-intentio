@@ -1,35 +1,19 @@
-/*
- TUIO C# Library - part of the reacTIVision project
- Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 3.0 of the License, or (at your option) any later version.
- 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public
- License along with this library.
-*/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace TUIO
+namespace Intentio.TUIO
 {
-
     /**
-     * <remarks>
-     * The TuioObject class encapsulates /tuio/2Dobj TUIO objects.
-     * </remarks>
-     *
-     * @author Martin Kaltenbrunner
-     * @version 1.1.6
-     */
+        * <remarks>
+        * The TuioObject class encapsulates /tuio/2Dobj TUIO objects.
+        * </remarks>
+        *
+        * @author Martin Kaltenbrunner
+        * @version 1.1.6
+        */
     public class TuioObject : TuioContainer
     {
         /**
@@ -189,7 +173,7 @@ namespace TUIO
          */
         public void update(TuioTime ttime, float xp, float yp, float a)
         {
-			TuioPoint lastPoint = path.Last.Value;
+            TuioPoint lastPoint = path.Last.Value;
             base.update(ttime, xp, yp);
 
             TuioTime diffTime = currentTime - lastPoint.TuioTime;
@@ -246,13 +230,13 @@ namespace TUIO
         {
             get { return symbol_id; }
         }
-		
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public int getSymbolID()
         {
             return SymbolID;
         }
-		
+
         /**
          * <summary>
          * Returns the rotation angle of this TuioObject.</summary>
@@ -263,12 +247,12 @@ namespace TUIO
             get { return angle; }
         }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public float getAngle()
         {
             return Angle;
         }
-		
+
         /**
          * <summary>
          * Returns the rotation angle in degrees of this TuioObject.</summary>
@@ -279,12 +263,12 @@ namespace TUIO
             get { return angle / (float)Math.PI * 180.0f; }
         }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public float getAngleDegrees()
         {
             return AngleDegrees;
         }
-		
+
         /**
          * <summary>
          * Returns the rotation speed of this TuioObject.</summary>
@@ -295,12 +279,12 @@ namespace TUIO
             get { return rotation_speed; }
         }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public float getRotationSpeed()
         {
             return RotationSpeed;
         }
-		
+
         /**
          * <summary>
          * Returns the rotation acceleration of this TuioObject.</summary>
@@ -311,12 +295,12 @@ namespace TUIO
             get { return rotation_accel; }
         }
 
-		[Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
+        [Obsolete("This method is provided only for compatability with legacy code. Use of the property instead is recommended.")]
         public float getRotationAccel()
         {
             return RotationAccel;
         }
-		
+
         /**
          * <summary>
          * Returns true of this TuioObject is moving.</summary>
@@ -332,5 +316,4 @@ namespace TUIO
         }
         #endregion
     }
-
 }

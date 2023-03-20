@@ -1,26 +1,11 @@
-/*
- TUIO C# Library - part of the reacTIVision project
- Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 3.0 of the License, or (at your option) any later version.
- 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public
- License along with this library.
-*/
-
-using System;
-
-namespace TUIO
+namespace Intentio.TUIO
 {
-
     /**
      * <para>
      * The TuioListener interface provides a simple callback infrastructure which is used by the {@link TuioClient} class
@@ -94,29 +79,29 @@ namespace TUIO
          */
         void removeTuioCursor(TuioCursor tcur);
 
-		/**
+        /**
          * <summary>
          * This callback method is invoked by the TuioClient when a new TuioBlob is added to the session.</summary>
          *
          * <param name="tblb">the TuioBlob reference associated to the addTuioBlob event</param>
          */
-		void addTuioBlob(TuioBlob tblb);
+        void addTuioBlob(TuioBlob tblb);
 
-		/**
+        /**
          * <summary>
          * This callback method is invoked by the TuioClient when an existing TuioBlob is updated during the session.</summary>
          *
          * <param name="tblb">the TuioBlob reference associated to the updateTuioBlob event</param>
          */
-		void updateTuioBlob(TuioBlob tblb);
+        void updateTuioBlob(TuioBlob tblb);
 
-		/**
+        /**
          * <summary>
          * This callback method is invoked by the TuioClient when an existing TuioBlob is removed from the session.</summary>
          *
          * <param name="tblb">the TuioBlob reference associated to the removeTuioBlob event</param>
          */
-		void removeTuioBlob(TuioBlob tblb);
+        void removeTuioBlob(TuioBlob tblb);
 
         /**
          * <summary>
