@@ -22,8 +22,24 @@ namespace Intentio
 
         private void ParentDashBoard_Load(object sender, EventArgs e)
         {
-            using var db = new Database();
-            children = db.Children;
+            for (int i = 0; i < children.Count; i++)
+            {
+                for (int j = 0; j < children[i].AttentionReports.Count; j++)
+                {
+                    dataGridView1.Rows.Add(i,
+                    children[i].Identifier.Name,
+                    children[i].AttentionReports[j].TimesDistracted,
+                    children[i].AttentionReports[j].TimeToComplete,
+                    children[i].AttentionReports[j].LettersMistaken,
+                    children[i].AttentionReports[j].NumbersMistaken,
+                    (children[i].AttentionReports[j].LettersMistaken + children[i].AttentionReports[j].NumbersMistaken));
+                }
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
