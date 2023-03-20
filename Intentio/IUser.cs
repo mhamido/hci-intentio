@@ -49,11 +49,20 @@ namespace Intentio
         public static IUser Parent(Device Identifier) => new(Identifier, false);
 
 
-        public Form StartActivity()
+        public Form StartActivity(Database db)
         {
-            Form activity = IsChild ? new TrailMakingTest(this) : new ParentDashBoard(this);
-            activity.ShowDialog();
-            return activity;
+            if (IsChild)
+            {
+                var activity = new TrailMakingTest(this);
+                activity.ShowDialog();
+                AttentionReports.Add(activity.GenerateReport());
+                db.AddOrUpdate(this);
+                return activity;
+            }
+
+            var pactivity = new ParentDashBoard(this);
+            pactivity.ShowDialog();
+            return pactivity;
         }
 
         public string Serialize() => JsonSerializer.Serialize<IUser>(this);

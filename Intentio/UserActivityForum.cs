@@ -28,7 +28,7 @@ namespace Intentio
             }
             // TODO: Start activity
             // User is registered, start activity.
-            return user.StartActivity();
+            return user.StartActivity(db);
         }
     }
 }

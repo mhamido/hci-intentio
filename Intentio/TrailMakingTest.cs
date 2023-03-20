@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Intentio.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace Intentio
 {
     public partial class TrailMakingTest : Form
@@ -18,52 +20,214 @@ namespace Intentio
         private readonly IUser child;
         private Graph graph;
         private readonly Timer timer = new Timer();
+        private readonly Timer endTimer = new Timer() { Interval = 5000 };
         private readonly Stopwatch stopwatch = new Stopwatch();
 
         private int timesDistracted = 0;
+        private int lettersMistake = 0;
+        private int numbersMistake = 0;
+
+        private char nextLetter = 'A';
+        private int nextNumber = 1;
+
+        private Sigil NextSigil = Sigil.Number;
+
+        private void SwitchSigil()
+        {
+            Node.Turn = !Node.Turn;
+
+            if (NextSigil == Sigil.Number)
+            {
+                ++nextNumber;
+                NextSigil = Sigil.Letter;
+                return;
+            }
+
+            ++nextLetter;
+            NextSigil = Sigil.Number;
+        }
 
         #region Attention
 
-        private SoundPlayer correctSoundPlayer = new();
-
-        private void OnCorrectConnection()
+        public AttentionReport GenerateReport()
         {
-
+            return new AttentionReport(timesDistracted, stopwatch.Elapsed, lettersMistake, numbersMistake);
         }
 
-        private void OnIncorrectConnection()
-        {
+        private readonly SoundPlayer correctSoundPlayer = new(Resources.ShortCoinBeep);
 
+        protected void OnCorrectConnection()
+        {
+            correctSoundPlayer.Play();
         }
 
-        private void OnLoseFocus()
-        {
+        private readonly SoundPlayer incorrectSoundPlayer = new(Resources.Dundun);
 
+        protected void OnIncorrectConnection()
+        {
+            incorrectSoundPlayer.Play();
         }
 
-        private void OnComplete()
-        {
+        private readonly SoundPlayer loseFocusSoundPlayer = new(Resources.Dundunnn);
 
+        protected void OnLoseFocus()
+        {
+            ++timesDistracted;
+            loseFocusSoundPlayer.Play();
         }
+
+        private readonly SoundPlayer completeSoundPlayer = new(Resources.ShortCorrectBeep);
+        protected void OnComplete()
+        {
+            completeSoundPlayer.Play();
+            endTimer.Start();
+        }
+
         #endregion
         public TrailMakingTest(IUser child)
         {
             InitializeComponent();
+            InitializeSound();
             this.child = child;
             Load += TrailMakingTest_Load;
             timer.Tick += Timer_Tick;
+            MouseMove += TrailMakingTest_MouseMove;
+            Paint += TrailMakingTest_Paint;
             // TODO: Load user specific settings and
             // generate a graph based on that
+            endTimer.Tick += (_, _) =>
+            {
+                Close();
+            };
         }
+
+        private void TrailMakingTest_Paint(object sender, PaintEventArgs e)
+        {
+            DrawBuffered(e.Graphics);
+        }
+
+        private Bitmap off;
+
+        private void DrawBuffered(Graphics g)
+        {
+            Graphics g2 = Graphics.FromImage(off);
+            Draw(g2);
+            g.DrawImage(off, 0, 0);
+        }
+
+        List<Point> mousePositions = new List<Point>();
+
+        const float Radius = (float)(Node.Diameter) / 2.0f;
+        private void TrailMakingTest_MouseMove(object sender, MouseEventArgs e)
+        {
+            float x = e.X;
+            float y = e.Y;
+
+            mousePositions.Add(e.Location);
+
+            foreach (var node in graph.Nodes)
+            {
+                float dx = x - node.Location.X;
+                float dy = y - node.Location.Y;
+                float delta = (float)Math.Sqrt(dx * dx + dy * dy);
+
+                if (node.IsDead) continue;
+
+                // Mouse is inside the node
+                if (delta <= Radius)
+                {
+                    switch (NextSigil)
+                    {
+                        case Sigil.Number:
+                            {
+                                if (node.Value is int && node.Value == nextNumber)
+                                {
+                                    OnCorrectConnection();
+                                    node.IsDead = true;
+                                    SwitchSigil();
+                                }
+                                else
+                                {
+                                    if (node.Value is int) ++numbersMistake;
+                                    else ++lettersMistake;
+
+                                    OnIncorrectConnection();
+                                }
+                                break;
+                            }
+                        case Sigil.Letter:
+                            {
+                                if (node.Value is char && node.Value == nextLetter)
+                                {
+                                    OnCorrectConnection();
+                                    node.IsDead = true;
+                                    SwitchSigil();
+                                }
+                                else
+                                {
+                                    if (node.Value is not int) ++numbersMistake;
+                                    else ++lettersMistake;
+
+                                    OnIncorrectConnection();
+                                }
+                                break;
+                            }
+                    }
+                    break;
+                }
+            }
+        }
+
+        private void InitializeSound()
+        {
+            var sounds = new SoundPlayer[] {
+                completeSoundPlayer,
+                incorrectSoundPlayer,
+                correctSoundPlayer,
+                incorrectSoundPlayer,
+                loseFocusSoundPlayer
+            };
+
+            completeSoundPlayer.Load();
+            incorrectSoundPlayer.Load();
+            correctSoundPlayer.Load();
+            incorrectSoundPlayer.Load();
+            incorrectSoundPlayer.Load();
+
+            foreach (var sound in sounds)
+            {
+                sound.Stream.Position = 0;
+            }
+        }
+        bool finished = false;
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            Draw(CreateGraphics());
+            if (finished) return;
+
+            bool allDead = true;
+            foreach (var node in graph.Nodes)
+            {
+                if (!node.IsDead)
+                {
+                    allDead = false;
+                    break;
+                }
+            }
+
+            if (allDead)
+            {
+                finished = true;
+                OnComplete();
+            }
+
+            DrawBuffered(CreateGraphics());
         }
 
         private void TrailMakingTest_Load(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Maximized;
+            off = new Bitmap(Width, Height);
             graph = new Graph(12, Width, Height);
             timer.Start();
             stopwatch.Start();
@@ -72,6 +236,12 @@ namespace Intentio
         private void Draw(Graphics g)
         {
             g.Clear(DefaultBackColor);
+
+            foreach (var point in mousePositions)
+            {
+                const float Size = 5.0f;
+                g.FillEllipse(Brushes.SlateGray, point.X - Size / 2, point.Y - Size / 2, Size, Size);
+            }
 
             foreach (var (from, to, visible) in graph.Edges)
             {
@@ -97,16 +267,27 @@ namespace Intentio
     public record Node(
         PointF Location,
         Sigil Enscryption,
-        dynamic Value,
-        Brush Brush
+        dynamic Value
     )
     {
         public const int Diameter = 75;
+        public bool IsDead = false;
+        public static bool Turn = true; // when Turn is true then if Sigil == Number then Green
 
         public void Draw(Graphics g)
         {
+            Brush brush;
+            if (Turn)
+            {
+                brush = (Enscryption == Sigil.Number) ? Brushes.LightGreen : Brushes.LightPink;
+            }
+            else
+            {
+                brush = (Enscryption == Sigil.Number) ? Brushes.LightPink : Brushes.LightGreen;
+            }
+
             g.FillEllipse(
-                Brush,
+                !IsDead ? brush : Brushes.Gray,
                 Location.X - Diameter / 2,
                 Location.Y - Diameter / 2,
                 Diameter,
@@ -159,21 +340,21 @@ namespace Intentio
             {
                 if (includeNumbers)
                 {
-                    var numberNode = FindPlaceForNode(Sigil.Number, nextNumber++, Brushes.LightPink);
+                    var numberNode = FindPlaceForNode(Sigil.Number, nextNumber++);
                     if (numberNode != null) Nodes.Add(numberNode);
                     vertices--;
                 }
 
                 if (includeLetters)
                 {
-                    var letterNode = FindPlaceForNode(Sigil.Letter, nextLetter == 'Z' ? (nextLetter = 'A') : nextLetter++, Brushes.LightGreen);
+                    var letterNode = FindPlaceForNode(Sigil.Letter, nextLetter == 'Z' ? (nextLetter = 'A') : nextLetter++);
                     if (letterNode != null) Nodes.Add(letterNode);
                     vertices--;
                 }
             }
         }
 #nullable enable
-        private Node? FindPlaceForNode(Sigil Enscryption, dynamic Value, Brush Brush)
+        private Node? FindPlaceForNode(Sigil Enscryption, dynamic Value)
         {
             // Give it a 100 tries to find a suitable spot, otherwise just fail.
             for (int i = 0; i < 100; i++)
@@ -200,8 +381,8 @@ namespace Intentio
                 if (foundSpot) return new Node(
                     new PointF(x, y),
                     Enscryption,
-                    Value,
-                    Brush);
+                    Value
+                    );
             }
 
             // No space :(
