@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,6 +22,30 @@ namespace Intentio
 
         private int timesDistracted = 0;
 
+        #region Attention
+
+        private SoundPlayer correctSoundPlayer = new();
+
+        private void OnCorrectConnection()
+        {
+
+        }
+
+        private void OnIncorrectConnection()
+        {
+
+        }
+
+        private void OnLoseFocus()
+        {
+
+        }
+
+        private void OnComplete()
+        {
+
+        }
+        #endregion
         public TrailMakingTest(IUser child)
         {
             InitializeComponent();
@@ -87,20 +112,30 @@ namespace Intentio
                 Diameter,
                 Diameter);
 
+            //g.DrawString(
+            //    Value.ToString(),
+            //    SystemFonts.DefaultFont,
+            //    Brushes.Black,
+            //    Location.X - SystemFonts.DefaultFont.Size,
+            //    Location.Y);
+
+            using var sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            sf.LineAlignment = StringAlignment.Center;
             g.DrawString(
                 Value.ToString(),
                 SystemFonts.DefaultFont,
                 Brushes.Black,
                 Location.X,
-                Location.Y);
+                Location.Y,
+                sf);
         }
 
     }
 
     public class Graph
     {
-        private readonly Random random = new(Seed: 0);
-
+        private readonly Random random = new();
         public readonly List<Node> Nodes = new();
         public readonly List<(Node, Node, bool)> Edges = new(); // TODO: draw edges when the child completes them
 
@@ -111,7 +146,6 @@ namespace Intentio
             int vertices,
             int width,
             int height,
-
             bool includeNumbers = true,
             bool includeLetters = true)
         {
@@ -141,7 +175,6 @@ namespace Intentio
 #nullable enable
         private Node? FindPlaceForNode(Sigil Enscryption, dynamic Value, Brush Brush)
         {
-
             // Give it a 100 tries to find a suitable spot, otherwise just fail.
             for (int i = 0; i < 100; i++)
             {
@@ -152,7 +185,7 @@ namespace Intentio
                 foreach (Node existingNode in Nodes)
                 {
                     float dx = (x - existingNode.Location.X);
-                    float dy = (x - existingNode.Location.Y);
+                    float dy = (y - existingNode.Location.Y);
                     float delta = (float)Math.Sqrt(dx * dx + dy * dy); // PERF: maybe remove sqrt?
 
                     // Nodes overlap, look for another place to put them.
@@ -164,7 +197,11 @@ namespace Intentio
                 }
 
                 // If this was reachable, then we found a good spot for it.
-                if (foundSpot) return new Node(new PointF(x, y), Enscryption, Value, Brush);
+                if (foundSpot) return new Node(
+                    new PointF(x, y),
+                    Enscryption,
+                    Value,
+                    Brush);
             }
 
             // No space :(

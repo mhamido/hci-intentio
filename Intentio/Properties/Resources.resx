@@ -121,4 +121,25 @@
   <data name="AppCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AppCode.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Dundun" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dundun.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Dundunnn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dundunnn.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Gameover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Gameover.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PixelyGameover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PixelyGameover.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ShortCoinBeep" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShortCoinBeep.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ShortCorrectBeep" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShortCorrectBeep.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ShortError" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShortError.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
