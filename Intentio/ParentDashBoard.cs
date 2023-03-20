@@ -12,9 +12,18 @@ namespace Intentio
 {
     public partial class ParentDashBoard : Form
     {
+        private List<IUser> children = new List<IUser>();
+
         public ParentDashBoard(IUser user)
         {
             InitializeComponent();
+            Load += ParentDashBoard_Load;
+        }
+
+        private void ParentDashBoard_Load(object sender, EventArgs e)
+        {
+            using var db = new Database();
+            children = db.Children;
         }
     }
 }

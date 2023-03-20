@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace Intentio
 {
@@ -13,6 +14,11 @@ namespace Intentio
         private List<IUser> _users = new List<IUser>();
         private static object sync = new object();
         private static string Path = "users.json";
+
+        public List<IUser> Children
+        {
+            get => _users.Where(usr => usr != null && usr.IsChild).ToList();
+        }
 
         public Database()
         {

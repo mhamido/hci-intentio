@@ -9,8 +9,13 @@ using System.Windows.Forms;
 
 namespace Intentio
 {
-    public record AttentionReport(int TimesDistracted)
+    public record AttentionReport(
+        int TimesDistracted,
+        TimeSpan TimeToComplete,
+        int LettersMistaken,
+        int NumbersMistaken)
     {
+        int TotalMistakes { get => LettersMistaken + NumbersMistaken; }
     }
 
     public class IUser
