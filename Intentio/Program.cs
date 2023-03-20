@@ -11,7 +11,7 @@ namespace Intentio
     internal static class Program
     {
         // TODO: Should be \false\ during the discussion.
-        private static bool BypassBluetooth = false;
+        private static bool BypassBluetooth = true;
 
         /// <summary>
         /// The main entry point for the application.
@@ -43,7 +43,7 @@ namespace Intentio
                         _ => Device.DebugParent
                     };
 
-                    UserActivityForum.Run(device);
+                     UserActivityForum.Run(device);
                 }
             }
         }
