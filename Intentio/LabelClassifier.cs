@@ -7,16 +7,12 @@ using System.Threading.Tasks;
 
 namespace Intentio
 {
-    
-      public sealed class LabelClassifier : ISocket <string>
-        {
-            private const int LC_CL_Port = 65434;
 
-            public LabelClassifier() : base("localhost", LC_CL_Port) { }
+    public sealed class LabelClassifier : ISocket<string>
+    {
+        private const int LC_CL_Port = 65434;
+        public LabelClassifier() : base("localhost", LC_CL_Port) {}
+        protected override string Parse(string input) => input.ToLower();
+    }
 
-            protected override string Parse(string input) => input;
-
-            
-        }
-    
 }

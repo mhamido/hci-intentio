@@ -8,6 +8,7 @@ using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
 using System.Media;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,7 +22,10 @@ namespace Intentio
         private Graph graph;
         private readonly Timer timer = new Timer();
         private readonly Timer endTimer = new Timer() { Interval = 5000 };
+        private readonly Timer socketTimer = new Timer();
+
         private readonly Stopwatch stopwatch = new Stopwatch();
+        private LabelClassifier labelClassifier;
 
         private int timesDistracted = 0;
         private int lettersMistake = 0;
@@ -97,8 +101,39 @@ namespace Intentio
             // generate a graph based on that
             endTimer.Tick += (_, _) =>
             {
+                labelClassifier.Dispose();
+                labelClassifier = null;
                 Close();
             };
+
+            socketTimer.Tick += SocketTimer_Tick;
+            socketTimer.Interval /= 2;
+
+            try
+            {
+                labelClassifier = new LabelClassifier();
+            }
+            catch (SocketException)
+            {
+                Console.WriteLine("Couldn't connect to label socket :(");
+            }
+
+            socketTimer.Start();
+        }
+
+        private void SocketTimer_Tick(object sender, EventArgs e)
+        {
+            var pos = labelClassifier?.Receive();
+            switch (pos)
+            {
+                case "left":
+                case "right":
+                    OnLoseFocus();
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         private void TrailMakingTest_Paint(object sender, PaintEventArgs e)

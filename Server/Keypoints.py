@@ -1,17 +1,11 @@
 # do stuff here @Bloz
 import mediapipe as mp
 import cv2
-from dollarpy import Recognizer,Template,Point
-import os
-import numpy as np
-from sklearn.pipeline import make_pipeline 
-from sklearn.preprocessing import StandardScaler 
-import pandas as pd
-from sklearn.linear_model import LogisticRegression, RidgeClassifier
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.metrics import accuracy_score # Accuracy metrics 
 import pickle
 import socket
+import numpy as np
+import pandas as pd
+
 mp_drawing = mp.solutions.drawing_utils # Drawing helpers
 mp_holistic = mp.solutions.holistic # Mediapipe Solutions
 
@@ -20,16 +14,16 @@ hostname="localhost"# 127.0.0.1 #0.0.0.0
 port=65434
 soc.bind((hostname,port))
 soc.listen(5)
-conn , addr = soc.accept()
+conn, addr = soc.accept()
+
+model = None
 
 with open('body_language.pkl', 'rb') as f:
-    model = pickle.load(f)
-    
+    model = pickle.load(f)    
 
 cap = cv2.VideoCapture(0)
 # Initiate holistic model
-with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-    
+with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:    
     while cap.isOpened():
         ret, frame = cap.read()
         
@@ -96,35 +90,37 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
             body_language_class = model.predict(X)[0]
             body_language_prob = model.predict_proba(X)[0]
             print(body_language_class, body_language_prob)
+
+            soc.sendall(bytes(body_language_class, encoding='utf-8'))
             
             # Grab ear coords
-            coords = tuple(np.multiply(
-                            np.array(
-                                (results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].x, 
-                                 results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].y))
-                        , [640,480]).astype(int))
+            #coords = tuple(np.multiply(
+            #                np.array(
+            #                    (results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].x, 
+            #                     results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].y))
+            #            , [640,480]).astype(int))
             
-            cv2.rectangle(image, 
-                          (coords[0], coords[1]+5), 
-                          (coords[0]+len(body_language_class)*20, coords[1]-30), 
-                          (245, 117, 16), -1)
-            cv2.putText(image, body_language_class, coords, 
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            #cv2.rectangle(image, 
+            #              (coords[0], coords[1]+5), 
+            #              (coords[0]+len(body_language_class)*20, coords[1]-30), 
+            #              (245, 117, 16), -1)
+            #cv2.putText(image, body_language_class, coords, 
+            #            cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
             
-            # Get status box
-            cv2.rectangle(image, (0,0), (250, 60), (245, 117, 16), -1)
+            ## Get status box
+            #cv2.rectangle(image, (0,0), (250, 60), (245, 117, 16), -1)
             
-            # Display Class
-            cv2.putText(image, 'CLASS'
-                        , (95,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-            cv2.putText(image, body_language_class.split(' ')[0]
-                        , (90,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            ## Display Class
+            #cv2.putText(image, 'CLASS'
+            #            , (95,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+            #cv2.putText(image, body_language_class.split(' ')[0]
+            #            , (90,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
             
-            # Display Probability
-            cv2.putText(image, 'PROB'
-                        , (15,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-            cv2.putText(image, str(round(body_language_prob[np.argmax(body_language_prob)],2))
-                        , (10,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            ## Display Probability
+            #cv2.putText(image, 'PROB'
+            #            , (15,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+            #cv2.putText(image, str(round(body_language_prob[np.argmax(body_language_prob)],2))
+            #            , (10,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
             
         except:
             pass
@@ -136,5 +132,7 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
 
 cap.release()
 cv2.destroyAllWindows()
-tuple(np.multiply(np.array((results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].x, 
-results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].y)), [640,480]).astype(int))
+soc.close()
+
+# tuple(np.multiply(np.array((results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].x, 
+# results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].y)), [640,480]).astype(int))
