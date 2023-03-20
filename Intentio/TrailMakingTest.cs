@@ -10,14 +10,17 @@ using System.Linq;
 using System.Media;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
 namespace Intentio
 {
+    using Timer = System.Windows.Forms.Timer;
     public partial class TrailMakingTest : Form
     {
+
         private readonly IUser child;
         private Graph graph;
         private readonly Timer timer = new Timer();
@@ -76,7 +79,8 @@ namespace Intentio
 
         protected void OnLoseFocus()
         {
-            ++timesDistracted;
+            Interlocked.Increment(ref timesDistracted);
+            //++timesDistracted;
             loseFocusSoundPlayer.Play();
         }
 
@@ -101,14 +105,15 @@ namespace Intentio
             // generate a graph based on that
             endTimer.Tick += (_, _) =>
             {
-                labelClassifier.Dispose();
+                labelClassifier?.Dispose();
                 labelClassifier = null;
                 Close();
             };
 
             socketTimer.Tick += SocketTimer_Tick;
-            socketTimer.Interval /= 2;
+            socketTimer.Interval *= 2;
 
+            labelClassifier = null;
             try
             {
                 labelClassifier = new LabelClassifier();
@@ -121,19 +126,22 @@ namespace Intentio
             socketTimer.Start();
         }
 
+        string msg = "";
+
         private void SocketTimer_Tick(object sender, EventArgs e)
         {
-            var pos = labelClassifier?.Receive();
-            switch (pos)
-            {
-                case "left":
-                case "right":
-                    OnLoseFocus();
-                    break;
+            //var pos = await Task.Run(() => labelClassifier?.ReceiveAsync());
+            //msg = pos;
+            //switch (pos)
+            //{
+            //    case "left":
+            //    case "right":
+            //        OnLoseFocus();
+            //        break;
 
-                default:
-                    break;
-            }
+            //    default:
+            //        break;
+            //}
         }
 
         private void TrailMakingTest_Paint(object sender, PaintEventArgs e)
@@ -271,7 +279,7 @@ namespace Intentio
         private void Draw(Graphics g)
         {
             g.Clear(DefaultBackColor);
-
+            g.DrawString(msg, DefaultFont, Brushes.Black, 0, 25);
             foreach (var point in mousePositions)
             {
                 const float Size = 5.0f;

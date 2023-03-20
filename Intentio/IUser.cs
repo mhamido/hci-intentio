@@ -60,7 +60,7 @@ namespace Intentio
                 return activity;
             }
 
-            var pactivity = new ParentDashBoard(this);
+            var pactivity = new ParentDashBoard(this, db.Children);
             pactivity.ShowDialog();
             return pactivity;
         }

@@ -12,11 +12,12 @@ namespace Intentio
 {
     public partial class ParentDashBoard : Form
     {
-        private List<IUser> children = new List<IUser>();
+        private List<IUser> children;
 
-        public ParentDashBoard(IUser user)
+        public ParentDashBoard(IUser user, List<IUser> children)
         {
             InitializeComponent();
+            this.children = children;
             Load += ParentDashBoard_Load;
         }
 
@@ -26,13 +27,14 @@ namespace Intentio
             {
                 for (int j = 0; j < children[i].AttentionReports.Count; j++)
                 {
-                    dataGridView1.Rows.Add(i,
+                    dataGridView1.Rows.Add(j + 1,
                     children[i].Identifier.Name,
                     children[i].AttentionReports[j].TimesDistracted,
                     children[i].AttentionReports[j].TimeToComplete,
                     children[i].AttentionReports[j].LettersMistaken,
                     children[i].AttentionReports[j].NumbersMistaken,
-                    (children[i].AttentionReports[j].LettersMistaken + children[i].AttentionReports[j].NumbersMistaken));
+                    (children[i].AttentionReports[j].LettersMistaken + 
+                    children[i].AttentionReports[j].NumbersMistaken));
                 }
             }
         }

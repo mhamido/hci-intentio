@@ -41,6 +41,9 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -51,47 +54,55 @@
             this.LettersMistaken,
             this.NumbersMistaken,
             this.TotalMistakes});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 266);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(1005, 306);
+            this.dataGridView1.Size = new System.Drawing.Size(1005, 542);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // Number
             // 
-            this.Number.HeaderText = "Number";
+            this.Number.HeaderText = "Session Number";
             this.Number.Name = "Number";
+            this.Number.ReadOnly = true;
             // 
             // Name
             // 
-            this.Name.HeaderText = "Name";
+            this.Name.HeaderText = "ParentDashBoard";
             this.Name.Name = "Name";
+            this.Name.ReadOnly = true;
             // 
             // TimesDistracted
             // 
             this.TimesDistracted.HeaderText = "TimesDistracted";
             this.TimesDistracted.Name = "TimesDistracted";
+            this.TimesDistracted.ReadOnly = true;
             // 
             // TimeToComplete
             // 
             this.TimeToComplete.HeaderText = "TimeToComplete";
             this.TimeToComplete.Name = "TimeToComplete";
+            this.TimeToComplete.ReadOnly = true;
             // 
             // LettersMistaken
             // 
             this.LettersMistaken.HeaderText = "LettersMistaken";
             this.LettersMistaken.Name = "LettersMistaken";
+            this.LettersMistaken.ReadOnly = true;
             // 
             // NumbersMistaken
             // 
             this.NumbersMistaken.HeaderText = "NumbersMistaken";
             this.NumbersMistaken.Name = "NumbersMistaken";
+            this.NumbersMistaken.ReadOnly = true;
             // 
             // TotalMistakes
             // 
             this.TotalMistakes.HeaderText = "TotalMistakes";
             this.TotalMistakes.Name = "TotalMistakes";
+            this.TotalMistakes.ReadOnly = true;
             // 
             // ParentDashBoard
             // 
@@ -100,8 +111,6 @@
             this.ClientSize = new System.Drawing.Size(1029, 584);
             this.Controls.Add(this.dataGridView1);
             this.Name.Name = "ParentDashBoard";
-            this.Name.HeaderText = "ParentDashBoard";
-            this.Text = "ParentDashBoard";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 

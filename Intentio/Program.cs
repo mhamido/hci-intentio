@@ -11,7 +11,7 @@ namespace Intentio
     internal static class Program
     {
         // TODO: Should be \false\ during the discussion.
-        private static bool BypassBluetooth = true;
+        private static bool BypassBluetooth = false;
 
         /// <summary>
         /// The main entry point for the application.

@@ -34,8 +34,23 @@ namespace Intentio
             {
                 return default;
             }
-
         }
+
+        public async Task<T> ReceiveAsync()
+        {
+            try
+            {
+                Array.Clear(buffer, 0, buffer.Length);
+                int bytesReceived = await stream.ReadAsync(buffer);
+                string contents = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
+                return Parse(contents);
+            }
+            catch (SocketException)
+            {
+                return default;
+            }
+        }
+
 
         protected abstract T Parse(string input);
 
