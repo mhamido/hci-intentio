@@ -127,8 +127,20 @@
   <data name="Dundunnn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Dundunnn.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="FacemeshOnly" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FacemeshOnly.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FaceWhilePlayingGame" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FaceWhilePlayingGame.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Gameover" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Gameover.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Gameplay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Gameplay.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ParentDashboard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ParentDashboard.mp4;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="PixelyGameover" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PixelyGameover.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
