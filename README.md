@@ -4,7 +4,7 @@ This project implements the Trail Making Test, a psychological test for measurin
 
 The system uses TUIO interactive markers as a controller, but the mouse can also be used an alternate form of input.
 
-The game visual, and audible feedback to redirect attention when lost, using pose estimation and hand tracking through the use of a camera, MediaPipe and a classifier to detect inattentiveness.
+The game creates visual, and audible feedback to redirect attention when lost, using pose estimation and hand tracking through the use of a camera, MediaPipe and a classifier to detect inattentiveness.
 
 External users, particularly parents and therapists, can use the system to monitor and assess the progression of treatment.
 
